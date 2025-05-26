@@ -11,6 +11,7 @@ load_dotenv()
 
 # Database URL from .env
 DATABASE_URL = os.getenv("DATABASE_URL")
+print("DB URL:", DATABASE_URL)
 
 def get_connection():
     return psycopg2.connect(DATABASE_URL)
@@ -42,7 +43,7 @@ def write_memory():
         conn.commit()
         cur.close()
         conn.close()
-        return jsonify({"status": "success"})
+        return jsonify({"status": "success"}), 200, {'Content-Type': 'application/json'}
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
@@ -64,11 +65,9 @@ def read_memory():
         conn.close()
 
         results = [{"user_input": r[0], "response": r[1], "timestamp": r[2].isoformat()} for r in rows]
-        return jsonify(results)
+        return jsonify(results), 200, {'Content-Type': 'application/json'}
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
 if __name__ == '__main__':
-    import os
-    port = int(os.environ.get("PORT", 5000))
-    app.run(host='0.0.0.0', port=port)
+    app.run(debug=True, port=5001)
