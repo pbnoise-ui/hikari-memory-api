@@ -1,0 +1,8 @@
+{
+  "routes": [
+    {
+      "src": "/write-memory",
+      "dest": "api/write-memory.js"
+    }
+  ]
+}
